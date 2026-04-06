@@ -12,12 +12,12 @@ class CounterWindow:
         self.store = store
         self.root = tk.Tk()
         self.root.title(config.app_name)
-        self.root.geometry("430x290")
-        self.root.minsize(430, 290)
-        self.root.configure(bg="#EEF1F4")
+        self.root.geometry("420x270")
+        self.root.minsize(420, 270)
+        self.root.configure(bg="#EDF1F5")
 
         self.count_var = tk.StringVar(value="0")
-        self.detail_var = tk.StringVar(value="0 characters today")
+        self.detail_var = tk.StringVar(value="0 today")
 
         self._build_layout()
         self._schedule_refresh()
@@ -43,98 +43,80 @@ class CounterWindow:
         self.root.destroy()
 
     def _build_layout(self) -> None:
-        canvas = tk.Canvas(self.root, bg="#EEF1F4", highlightthickness=0, bd=0)
-        canvas.pack(fill=tk.BOTH, expand=True)
+        shell = tk.Frame(self.root, bg="#EDF1F5", padx=22, pady=22)
+        shell.pack(fill=tk.BOTH, expand=True)
 
-        canvas.create_oval(-20, -30, 145, 135, fill="#F8FBFF", outline="")
-        canvas.create_oval(295, 18, 430, 153, fill="#F7F4FF", outline="")
-        canvas.create_oval(320, 205, 470, 355, fill="#F4FAF8", outline="")
+        shadow = tk.Frame(shell, bg="#E3E8EE", bd=0)
+        shadow.pack(fill=tk.BOTH, expand=True, padx=(4, 0), pady=(4, 0))
 
-        self._rounded_rect(canvas, 33, 38, 401, 250, 34, fill="#E3E8EE", outline="")
-        self._rounded_rect(canvas, 28, 30, 397, 245, 34, fill="#FFFFFF", outline="#E5E8ED")
+        card = tk.Frame(shadow, bg="#FFFFFF", bd=0)
+        card.place(x=-4, y=-4, relwidth=1.0, relheight=1.0)
 
-        badge = tk.Frame(canvas, bg="#F6F7F9", padx=10, pady=8)
-        tk.Label(
-            badge,
-            text="W",
-            bg="#F6F7F9",
-            fg="#545862",
-            font=("Segoe UI Semibold", 20),
-        ).pack()
-        canvas.create_window(342, 76, window=badge, width=58, height=54)
+        top = tk.Frame(card, bg="#FFFFFF", padx=28, pady=24)
+        top.pack(fill=tk.X)
+
+        left = tk.Frame(top, bg="#FFFFFF")
+        left.pack(side=tk.LEFT, fill=tk.X, expand=True)
 
         tk.Label(
-            canvas,
+            left,
             text="TODAY",
             bg="#FFFFFF",
-            fg="#8A9099",
+            fg="#969BA3",
             font=("Segoe UI Semibold", 10),
-        ).place(x=60, y=66)
+        ).pack(anchor=tk.W)
 
         tk.Label(
-            canvas,
-            text="Writing Count",
+            left,
+            text="Typing Count",
             bg="#FFFFFF",
-            fg="#16181D",
-            font=("SF Pro Display", 20, "bold"),
-        ).place(x=60, y=92)
+            fg="#14161A",
+            font=("Segoe UI Semibold", 18),
+        ).pack(anchor=tk.W, pady=(6, 0))
+
+        token = tk.Frame(top, bg="#F7F8FA", padx=16, pady=10)
+        token.pack(side=tk.RIGHT)
 
         tk.Label(
-            canvas,
+            token,
+            text="W",
+            bg="#F7F8FA",
+            fg="#575C66",
+            font=("Segoe UI Semibold", 18),
+        ).pack()
+
+        body = tk.Frame(card, bg="#FFFFFF", padx=28, pady=0)
+        body.pack(fill=tk.BOTH, expand=True)
+
+        tk.Label(
+            body,
             textvariable=self.count_var,
             bg="#FFFFFF",
             fg="#111317",
-            font=("SF Pro Display", 54, "bold"),
-        ).place(x=56, y=138)
+            font=("Segoe UI", 56, "bold"),
+        ).pack(anchor=tk.W, pady=(8, 0))
 
         tk.Label(
-            canvas,
+            body,
             textvariable=self.detail_var,
             bg="#FFFFFF",
-            fg="#7A808A",
+            fg="#7D838C",
             font=("Segoe UI", 11),
-        ).place(x=61, y=205)
+        ).pack(anchor=tk.W, pady=(6, 0))
+
+        footer = tk.Frame(card, bg="#FFFFFF", padx=28, pady=20)
+        footer.pack(fill=tk.X, side=tk.BOTTOM)
 
         tk.Label(
-            canvas,
-            text="Stored locally. No typed content is saved.",
+            footer,
+            text="Local only. No text content stored.",
             bg="#FFFFFF",
-            fg="#B1B5BC",
+            fg="#B1B6BD",
             font=("Segoe UI", 9),
-        ).place(x=61, y=224)
+        ).pack(anchor=tk.W)
 
     def _schedule_refresh(self) -> None:
         count = self.store.get_today_count()
         self.count_var.set(str(count))
-        self.detail_var.set(f"{count} characters today")
+        self.detail_var.set(f"{count} today")
         self.root.after(self.config.refresh_interval_ms, self._schedule_refresh)
-
-    @staticmethod
-    def _rounded_rect(canvas: tk.Canvas, x1: int, y1: int, x2: int, y2: int, radius: int, **kwargs) -> None:
-        points = [
-            x1 + radius,
-            y1,
-            x2 - radius,
-            y1,
-            x2,
-            y1,
-            x2,
-            y1 + radius,
-            x2,
-            y2 - radius,
-            x2,
-            y2,
-            x2 - radius,
-            y2,
-            x1 + radius,
-            y2,
-            x1,
-            y2,
-            x1,
-            y2 - radius,
-            x1,
-            y1 + radius,
-            x1,
-            y1,
-        ]
-        canvas.create_polygon(points, smooth=True, splinesteps=36, **kwargs)

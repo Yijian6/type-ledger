@@ -56,18 +56,23 @@ class TrayController:
         image = Image.new("RGBA", (64, 64), (0, 0, 0, 0))
         draw = ImageDraw.Draw(image)
 
-        draw.rounded_rectangle((8, 9, 56, 57), radius=19, fill=(228, 233, 239, 150))
-        draw.rounded_rectangle((6, 6, 58, 58), radius=20, fill=(255, 255, 255, 248))
-        draw.rounded_rectangle((7, 7, 57, 57), radius=19, outline=(229, 232, 237, 255), width=1)
+        # Soft outer shadow
+        draw.rounded_rectangle((9, 10, 56, 57), radius=18, fill=(204, 212, 223, 110))
 
-        accent = (244, 246, 249, 255)
-        draw.ellipse((12, 10, 35, 28), fill=accent)
+        # Glassy card
+        draw.rounded_rectangle((7, 7, 57, 57), radius=18, fill=(255, 255, 255, 248))
+        draw.rounded_rectangle((7, 7, 57, 57), radius=18, outline=(228, 232, 238, 255), width=1)
+        draw.rounded_rectangle((11, 10, 53, 28), radius=10, fill=(247, 249, 252, 255))
 
-        stroke = (80, 85, 94, 255)
-        draw.line((18, 20, 24, 44), fill=stroke, width=6)
-        draw.line((24, 44, 31, 29), fill=stroke, width=6)
-        draw.line((31, 29, 39, 44), fill=stroke, width=6)
-        draw.line((39, 44, 46, 20), fill=stroke, width=6)
+        # Rounded W monogram
+        stroke = (86, 90, 98, 255)
+        draw.line((18, 21, 24, 43), fill=stroke, width=5, joint="curve")
+        draw.line((24, 43, 31, 30), fill=stroke, width=5, joint="curve")
+        draw.line((31, 30, 39, 43), fill=stroke, width=5, joint="curve")
+        draw.line((39, 43, 46, 21), fill=stroke, width=5, joint="curve")
+
+        # Small soft accent to keep it from feeling sterile
+        draw.ellipse((43, 14, 49, 20), fill=(221, 236, 230, 255))
 
         buffer = BytesIO()
         image.save(buffer, format="PNG")
