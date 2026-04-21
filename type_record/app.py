@@ -19,9 +19,12 @@ def main() -> None:
     tray: TrayController | None = None
 
     def export_csv() -> None:
-        export_path = store.export_history_csv()
-        window.call_in_main_thread(lambda: window.show_export_message(tr(config.language, "exported", name=export_path.name)))
-        os.startfile(str(export_path.parent))
+        try:
+            export_path = store.export_history_csv()
+            window.call_in_main_thread(lambda: window.show_export_message(tr(config.language, "exported", name=export_path.name)))
+            _open_folder(str(export_path.parent))
+        except Exception as exc:
+            _show_error(tr(config.language, "export_failed", error=exc))
 
     try:
         counter.start()
@@ -66,7 +69,16 @@ def main() -> None:
         window.call_in_main_thread(confirm_and_reset)
 
     def open_data_folder() -> None:
-        os.startfile(str(store.data_dir))
+        try:
+            _open_folder(str(store.data_dir))
+        except Exception as exc:
+            _show_error(tr(config.language, "open_folder_failed", path=store.data_dir, error=exc))
+
+    def _open_folder(path: str) -> None:
+        os.startfile(path)
+
+    def _show_error(message: str) -> None:
+        window.call_in_main_thread(lambda: messagebox.showerror(tr(config.language, "action_failed_title"), message))
 
     def exit_app() -> None:
         nonlocal is_exiting
