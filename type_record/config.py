@@ -48,6 +48,7 @@ class AppConfig:
                 if field_name in data:
                     setattr(instance, field_name, data[field_name])
 
+        instance._normalize()
         instance._settings_path = settings_path
         instance._settings_backup_path = backup_path
         return instance
@@ -82,6 +83,39 @@ class AppConfig:
         except (OSError, json.JSONDecodeError, TypeError, ValueError):
             return None
         return data if isinstance(data, dict) else None
+
+    def _normalize(self) -> None:
+        defaults = type(self)()
+        self.app_name = self._coerce_text(self.app_name, defaults.app_name)
+        self.tray_tooltip = self._coerce_text(self.tray_tooltip, defaults.tray_tooltip)
+        self.count_space = self._coerce_bool(self.count_space, defaults.count_space)
+        self.count_enter = self._coerce_bool(self.count_enter, defaults.count_enter)
+        self.backspace_decrements = self._coerce_bool(self.backspace_decrements, defaults.backspace_decrements)
+        self.start_hidden_to_tray = self._coerce_bool(self.start_hidden_to_tray, defaults.start_hidden_to_tray)
+        self.refresh_interval_ms = self._coerce_int(self.refresh_interval_ms, defaults.refresh_interval_ms, minimum=100, maximum=5000)
+        self.session_timeout_seconds = self._coerce_int(self.session_timeout_seconds, defaults.session_timeout_seconds, minimum=60, maximum=86400)
+        self.language = self.language if self.language in {"en", "zh"} else defaults.language
+
+    def _coerce_text(self, value: object, default: str) -> str:
+        return value if isinstance(value, str) and value.strip() else default
+
+    def _coerce_bool(self, value: object, default: bool) -> bool:
+        if isinstance(value, bool):
+            return value
+        if isinstance(value, str):
+            normalized = value.strip().lower()
+            if normalized in {"true", "1", "yes", "on"}:
+                return True
+            if normalized in {"false", "0", "no", "off"}:
+                return False
+        return default
+
+    def _coerce_int(self, value: object, default: int, minimum: int, maximum: int) -> int:
+        try:
+            parsed = int(value)
+        except (TypeError, ValueError):
+            return default
+        return max(minimum, min(maximum, parsed))
 
     def _write_json_atomic(self, target: Path, payload: dict) -> None:
         target.parent.mkdir(parents=True, exist_ok=True)

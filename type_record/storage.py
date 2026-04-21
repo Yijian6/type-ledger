@@ -338,7 +338,7 @@ class DailyCountStore:
 
         if "counts_by_date" not in data:
             legacy_date = str(data.get("date", self._today_str()))
-            legacy_count = max(0, int(data.get("count", 0)))
+            legacy_count = self._safe_int(data.get("count", 0))
             return {
                 "counts_by_date": {legacy_date: legacy_count},
                 "typed_by_date": {legacy_date: legacy_count},
@@ -363,34 +363,34 @@ class DailyCountStore:
         raw_counts = data.get("counts_by_date", {})
         if isinstance(raw_counts, dict):
             for day_key, value in raw_counts.items():
-                counts_by_date[str(day_key)] = max(0, int(value))
+                counts_by_date[str(day_key)] = self._safe_int(value)
 
         raw_typed = data.get("typed_by_date", {})
         if isinstance(raw_typed, dict):
             for day_key, value in raw_typed.items():
-                typed_by_date[str(day_key)] = max(0, int(value))
+                typed_by_date[str(day_key)] = self._safe_int(value)
 
         raw_pasted = data.get("pasted_by_date", {})
         if isinstance(raw_pasted, dict):
             for day_key, value in raw_pasted.items():
-                pasted_by_date[str(day_key)] = max(0, int(value))
+                pasted_by_date[str(day_key)] = self._safe_int(value)
 
         raw_backspace = data.get("backspace_by_date", {})
         if isinstance(raw_backspace, dict):
             for day_key, value in raw_backspace.items():
-                backspace_by_date[str(day_key)] = max(0, int(value))
+                backspace_by_date[str(day_key)] = self._safe_int(value)
 
         raw_peak_wpm = data.get("peak_wpm_by_date", {})
         if isinstance(raw_peak_wpm, dict):
             for day_key, value in raw_peak_wpm.items():
-                peak_wpm_by_date[str(day_key)] = max(0.0, float(value))
+                peak_wpm_by_date[str(day_key)] = self._safe_float(value)
 
         raw_hourly_typed = data.get("hourly_typed_by_date", {})
         if isinstance(raw_hourly_typed, dict):
             for day_key, hours in raw_hourly_typed.items():
                 if isinstance(hours, dict):
                     hourly_typed_by_date[str(day_key)] = {
-                        str(hour_key): max(0, int(value))
+                        str(hour_key): self._safe_int(value)
                         for hour_key, value in hours.items()
                     }
 
@@ -399,7 +399,7 @@ class DailyCountStore:
             for day_key, hours in raw_hourly_pasted.items():
                 if isinstance(hours, dict):
                     hourly_pasted_by_date[str(day_key)] = {
-                        str(hour_key): max(0, int(value))
+                        str(hour_key): self._safe_int(value)
                         for hour_key, value in hours.items()
                     }
 
@@ -416,12 +416,12 @@ class DailyCountStore:
                         {
                             "started_at": str(item.get("started_at", "")),
                             "ended_at": str(item.get("ended_at", "")),
-                            "duration_seconds": max(0, int(item.get("duration_seconds", 0))),
-                            "delta": int(item.get("delta", 0)),
-                            "typed": max(0, int(item.get("typed", 0))),
-                            "pasted": max(0, int(item.get("pasted", 0))),
-                            "backspace": max(0, int(item.get("backspace", 0))),
-                            "accuracy": max(0.0, float(item.get("accuracy", 0.0))),
+                            "duration_seconds": self._safe_int(item.get("duration_seconds", 0)),
+                            "delta": self._safe_signed_int(item.get("delta", 0)),
+                            "typed": self._safe_int(item.get("typed", 0)),
+                            "pasted": self._safe_int(item.get("pasted", 0)),
+                            "backspace": self._safe_int(item.get("backspace", 0)),
+                            "accuracy": self._safe_float(item.get("accuracy", 0.0), maximum=1.0),
                         }
                     )
 
@@ -453,6 +453,25 @@ class DailyCountStore:
     def _increment_hour_bucket(self, state_key: str, day_key: str, hour_key: str, amount: int) -> None:
         day_hours = self._state[state_key].setdefault(day_key, {})
         day_hours[hour_key] = int(day_hours.get(hour_key, 0)) + amount
+
+    def _safe_int(self, value: object, default: int = 0) -> int:
+        try:
+            return max(0, int(value))
+        except (TypeError, ValueError):
+            return default
+
+    def _safe_signed_int(self, value: object, default: int = 0) -> int:
+        try:
+            return int(value)
+        except (TypeError, ValueError):
+            return default
+
+    def _safe_float(self, value: object, default: float = 0.0, maximum: float | None = None) -> float:
+        try:
+            parsed = max(0.0, float(value))
+        except (TypeError, ValueError):
+            return default
+        return min(maximum, parsed) if maximum is not None else parsed
 
     def _load_json_file(self, target: Path) -> dict | None:
         if not target.exists():
