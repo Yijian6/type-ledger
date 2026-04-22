@@ -1,5 +1,6 @@
 ﻿from __future__ import annotations
 
+import ctypes
 import os
 import sys
 import tkinter.messagebox as messagebox
@@ -14,6 +15,11 @@ from type_record.ui import CounterWindow
 
 def main() -> None:
     config = AppConfig.load()
+    instance_guard = _SingleInstanceGuard.acquire("Local\\MinimalTypingTracker.TypeRecord")
+    if instance_guard is None:
+        messagebox.showinfo(config.app_name, tr(config.language, "already_running"))
+        return
+
     store = DailyCountStore(config.data_file)
     counter = KeyboardCounter(config=config, store=store)
     tray: TrayController | None = None
@@ -88,6 +94,7 @@ def main() -> None:
         counter.stop()
         if tray is not None:
             tray.stop()
+        instance_guard.close()
         window.call_in_main_thread(window.destroy)
 
     tray = TrayController(
@@ -116,3 +123,27 @@ def main() -> None:
     except KeyboardInterrupt:
         exit_app()
         sys.exit(0)
+
+
+class _SingleInstanceGuard:
+    _ERROR_ALREADY_EXISTS = 183
+
+    def __init__(self, kernel32, handle: int) -> None:
+        self._kernel32 = kernel32
+        self._handle = handle
+
+    @classmethod
+    def acquire(cls, name: str) -> _SingleInstanceGuard | None:
+        kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+        handle = kernel32.CreateMutexW(None, False, name)
+        if not handle:
+            raise OSError(ctypes.get_last_error(), "CreateMutexW failed")
+        if ctypes.get_last_error() == cls._ERROR_ALREADY_EXISTS:
+            kernel32.CloseHandle(handle)
+            return None
+        return cls(kernel32, handle)
+
+    def close(self) -> None:
+        if self._handle:
+            self._kernel32.CloseHandle(self._handle)
+            self._handle = 0
