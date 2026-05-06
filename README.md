@@ -6,8 +6,8 @@ TypeLedger is a privacy-first Windows desktop typing tracker for people who want
 
 It runs in the background, lives in the system tray, stores aggregate metrics only, and never stores raw typed content.
 
-> Current product name in code/UI: `Type Record`  
-> Recommended public GitHub repository name: `type-ledger`
+> GitHub repository: `Yijian6/type-ledger`  
+> Internal data paths still use `TypeRecord` for compatibility.
 
 ## Quick Start
 
@@ -22,7 +22,7 @@ After launch, the app can stay in the system tray and keep tracking in the backg
 
 ## Why This Name
 
-`TypeLedger` is the naming direction I recommend for the repository because it is:
+`TypeLedger` is the public name for this project because it is:
 
 - easier to remember than a generic `tracker` name
 - more searchable than abstract product names

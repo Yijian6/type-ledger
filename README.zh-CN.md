@@ -6,8 +6,8 @@ TypeLedger 是一个面向 Windows 的、注重隐私的桌面输入统计工具
 
 它会在后台运行，常驻系统托盘，只保存汇总指标，不保存你输入的原始文本。
 
-> 当前代码与界面中的产品名仍然是 `Type Record`  
-> 我推荐的 GitHub 仓库公开名称是 `type-ledger`
+> GitHub 仓库：`Yijian6/type-ledger`  
+> 内部数据路径仍然保留 `TypeRecord`，用于兼容已有数据。
 
 ## 快速开始
 
@@ -22,7 +22,7 @@ python app.py
 
 ## 为什么推荐这个名字
 
-我更推荐把仓库名改成 `TypeLedger`，原因很直接：
+现在公开项目名使用 `TypeLedger`，原因很直接：
 
 - 比泛泛的 `tracker` 更容易记住
 - 比抽象名字更容易被搜索到

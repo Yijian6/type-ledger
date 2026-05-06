@@ -1,6 +1,6 @@
 # Branding Direction
 
-## Recommended Repository Name
+## Repository Name
 
 `type-ledger`
 
@@ -21,8 +21,8 @@
 
 Use `TypeLedger` as the public-facing GitHub/release brand while keeping internal migration from `Type Record` gradual.
 
-Recommended order:
+Current migration state:
 
-1. Rename the GitHub repository to `type-ledger`
-2. Keep code/package identifiers stable for now
-3. Migrate UI/app strings only when release packaging is ready
+1. GitHub repository renamed to `type-ledger`
+2. Code/package identifiers remain stable for now
+3. UI/app strings can migrate further when release packaging is ready
