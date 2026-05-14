@@ -42,6 +42,18 @@ TypeLedger 帮你回答一些每天很难凭感觉判断的问题：
 
 当前版本还没有代码签名。Windows SmartScreen 或安全软件可能会提示风险，因为 TypeLedger 需要使用全局键盘钩子来统计按键数量。这个钩子只用于汇总计数，不会保存你输入的具体内容。
 
+## 界面预览
+
+截图使用的是本地样本数据。
+
+<p>
+  <img src="./docs/assets/screenshot-dashboard-zh.png" alt="TypeLedger 中文主界面，展示今日输入统计和周效率" width="100%">
+</p>
+
+<p>
+  <img src="./docs/assets/screenshot-hourly-zh.png" alt="TypeLedger 中文小时分布视图" width="100%">
+</p>
+
 ## 为什么做它
 
 输入行为是知识工作最清晰的痕迹之一，但很多工具要么完全忽略它，要么收集得太多。TypeLedger 保留有用的趋势信号，去掉敏感的内容部分。

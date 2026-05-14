@@ -2,7 +2,7 @@
 
 TRANSLATIONS = {
     "en": {
-        "app_label": "TYPE RECORD",
+        "app_label": "TypeLedger",
         "today": "TODAY",
         "typing_count": "Typing Count",
         "typed_today": "Keyboard typed",
@@ -133,11 +133,11 @@ TRANSLATIONS = {
         "action_failed_title": "Action failed",
         "open_folder_failed": "Could not open folder:\n{path}\n\nError: {error}",
         "export_failed": "Could not export history.\n\nError: {error}",
-        "already_running": "Type Record is already running in the system tray.",
+        "already_running": "TypeLedger is already running in the system tray.",
         "error_start_listener": "Failed to start keyboard listener.\n\nCommon causes:\n1. The keyboard package is not installed\n2. Security software blocked the global keyboard hook\n3. Input in elevated apps may not be visible to a normal process\n\nError: {error}",
     },
     "zh": {
-        "app_label": "输入记录",
+        "app_label": "输入账本",
         "today": "今天",
         "typing_count": "输入统计",
         "typed_today": "键盘输入",
@@ -268,7 +268,7 @@ TRANSLATIONS = {
         "action_failed_title": "操作失败",
         "open_folder_failed": "无法打开文件夹：\n{path}\n\n错误：{error}",
         "export_failed": "无法导出历史记录。\n\n错误：{error}",
-        "already_running": "输入记录已经在系统托盘中运行。",
+        "already_running": "输入账本已经在系统托盘中运行。",
         "error_start_listener": "键盘监听启动失败。\n\n常见原因：\n1. 没有安装 keyboard 依赖\n2. 安全软件拦截了全局键盘钩子\n3. 管理员权限程序中的输入，普通权限进程可能无法监听\n\n错误：{error}",
     },
 }

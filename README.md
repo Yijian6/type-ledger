@@ -42,6 +42,18 @@ TypeLedger helps answer questions that are hard to feel accurately day by day:
 
 The current build is unsigned. Windows SmartScreen or antivirus tools may warn because TypeLedger uses a global keyboard hook to count keystrokes. The app uses that hook for aggregate counting only; it does not store typed content.
 
+## Screenshots
+
+Screenshots use sample local data.
+
+<p>
+  <img src="./docs/assets/screenshot-dashboard-en.png" alt="TypeLedger dashboard showing today's typing count and weekly efficiency" width="100%">
+</p>
+
+<p>
+  <img src="./docs/assets/screenshot-hourly-en.png" alt="TypeLedger hourly distribution view" width="100%">
+</p>
+
 ## Why It Exists
 
 Typing is one of the clearest traces of knowledge work, but most tools either ignore it or collect too much. TypeLedger keeps the useful signal and removes the sensitive part.

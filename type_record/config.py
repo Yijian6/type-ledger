@@ -8,13 +8,13 @@ from pathlib import Path
 
 @dataclass
 class AppConfig:
-    app_name: str = "Type Record"
+    app_name: str = "TypeLedger"
     count_space: bool = True
     count_enter: bool = False
     backspace_decrements: bool = True
     refresh_interval_ms: int = 300
     session_timeout_seconds: int = 300
-    tray_tooltip: str = "Type Record"
+    tray_tooltip: str = "TypeLedger"
     start_hidden_to_tray: bool = True
     language: str = "en"
     weekly_output_target: int = 10000

@@ -29,7 +29,7 @@ def test_config_load_normalizes_invalid_settings(tmp_path, monkeypatch) -> None:
 
     config = AppConfig.load()
 
-    assert config.app_name == "Type Record"
+    assert config.app_name == "TypeLedger"
     assert config.count_space is False
     assert config.count_enter is True
     assert config.backspace_decrements is True
