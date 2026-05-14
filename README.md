@@ -1,50 +1,44 @@
 # TypeLedger
 
-[Simplified Chinese](./README.zh-CN.md) | **English**
+**English** | [简体中文](./README.zh-CN.md)
 
-TypeLedger is a privacy-first Windows desktop typing tracker. It helps you understand daily output, session rhythm, hourly activity, and weekly efficiency without storing what you typed.
+A calm, privacy-first Windows typing tracker for understanding your daily output, writing rhythm, and weekly efficiency.
 
-It is designed for writers, developers, researchers, students, and knowledge workers who want a calm local record of their typing activity.
-
-> Repository: `Yijian6/type-ledger`
-> Data compatibility: internal data paths still use `TypeRecord`
-
-## Why Use It
-
-TypeLedger answers practical questions:
-
-- Did I actually write today?
-- Is this week more productive than last week?
-- Did output improve because I worked longer or because I worked more efficiently?
-- Which hours of the day are usually my most active?
-- Am I building a consistent writing or coding rhythm?
-
-## Privacy Model
-
-TypeLedger only stores aggregate numbers.
-
-It records counts such as typed characters, pasted characters, backspaces, session length, hourly totals, and weekly summaries. It does not save raw typed text, clipboard content, window titles, website URLs, file names, screenshots, or keystroke sequences.
-
-The app runs locally on your Windows machine. No cloud account is required.
-
-## Download And Run
-
-The portable Windows build is:
+TypeLedger runs locally in the background, lives in the system tray, and records aggregate typing metrics only. It helps you see whether you are building a consistent writing or coding rhythm without saving what you typed.
 
 ```text
-TypeLedger-windows-portable.zip
+Local first. No account. No raw text storage.
 ```
 
-To use it:
+## At A Glance
 
-1. Download the zip from GitHub Releases.
-2. Extract it to a folder you trust.
-3. Run `TypeLedger.exe`.
-4. Find the tray icon if the main window starts hidden.
+| What | Details |
+| --- | --- |
+| Platform | Windows desktop |
+| Best for | Writers, developers, researchers, students, knowledge workers |
+| Interface | English and Simplified Chinese |
+| Data | Local aggregate metrics |
+| Privacy | No raw typed text, no clipboard content, no screenshots |
+| Package | Portable Windows build with PyInstaller |
 
-The current build is unsigned. Windows SmartScreen or antivirus tools may warn because the app uses a global keyboard hook to count keystrokes. This is expected for local input trackers. TypeLedger does not store typed content.
+## Quick Links
 
-## Features
+- [中文 README](./README.zh-CN.md)
+- [Run from source](#run-from-source)
+- [Build the Windows app](#build-the-windows-app)
+- [Release checklist](./docs/release-checklist.md)
+
+## What It Helps You Understand
+
+TypeLedger is built around a few practical questions:
+
+- Did I actually write or code today?
+- Is this week more productive than last week?
+- Did output improve because I worked longer, or because I worked more efficiently?
+- Which hours of the day are usually my most active?
+- Am I building a more consistent rhythm over time?
+
+## Core Features
 
 | Area | What You Get |
 | --- | --- |
@@ -53,24 +47,34 @@ The current build is unsigned. Windows SmartScreen or antivirus tools may warn b
 | Speed estimate | CPM and WPM estimates based on recent keyboard input |
 | Weekly efficiency | Weekly output, active time, active efficiency, comparison with last week and target |
 | History | Daily records, 30-day trend, hourly distribution, CSV export |
-| Tray app | Runs in the background, supports tray menu actions |
+| Tray app | Background mode, tray menu, quick access to settings and history |
 | Localization | English and Simplified Chinese UI |
 
-## Data Location
+## Privacy Model
 
-TypeLedger stores local data under:
+TypeLedger stores aggregate numbers only.
+
+It records counts such as typed characters, pasted characters, backspaces, session length, hourly totals, and weekly summaries. It does not save raw typed text, clipboard content, window titles, website URLs, file names, screenshots, or keystroke sequences.
+
+The app runs on your own Windows machine. No cloud account is required.
+
+## Download And Use
+
+Download the latest portable build from [GitHub Releases](https://github.com/Yijian6/type-ledger/releases):
 
 ```text
-%APPDATA%\TypeRecord\
+TypeLedger-windows-portable.zip
 ```
 
-The folder name remains `TypeRecord` for compatibility with earlier versions.
+Then:
 
-Main files:
+1. Extract the zip to a folder you trust.
+2. Run `TypeLedger.exe`.
+3. If the main window starts hidden, open it from the system tray.
 
-- `data\daily_counts.json`
-- `config\settings.json`
-- `data\logs\type_record.log`
+The current build is unsigned. Windows SmartScreen or antivirus tools may warn because the app uses a global keyboard hook to count keystrokes. This is expected for local input trackers. TypeLedger does not store typed content.
+
+Developers can also use the source workflow below.
 
 ## Run From Source
 
@@ -86,7 +90,7 @@ pip install -r requirements.txt
 python app.py
 ```
 
-## Build Windows Portable App
+## Build The Windows App
 
 Install development dependencies:
 
@@ -94,7 +98,7 @@ Install development dependencies:
 .venv\Scripts\pip install -r requirements-dev.txt
 ```
 
-Build:
+Build the portable app:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\build_windows.ps1
@@ -107,7 +111,23 @@ dist\TypeLedger\TypeLedger.exe
 dist\TypeLedger-windows-portable.zip
 ```
 
-## Development Checks
+## Local Data
+
+TypeLedger stores local data under:
+
+```text
+%APPDATA%\TypeRecord\
+```
+
+The folder name remains `TypeRecord` for compatibility with earlier versions.
+
+Main files:
+
+- `data\daily_counts.json`
+- `config\settings.json`
+- `data\logs\type_record.log`
+
+## Development
 
 Run tests:
 
@@ -115,19 +135,15 @@ Run tests:
 python -m pytest
 ```
 
-Run linting if needed:
+Run linting:
 
 ```powershell
 ruff check .
 ```
 
-## Release Notes For Users
+## Status
 
-- This is a local Windows desktop app.
-- It counts aggregate typing activity only.
-- It does not store what you type.
-- The portable build is currently unsigned.
-- Some security tools may warn because keyboard counting requires a global keyboard hook.
+TypeLedger is an early-stage personal productivity tool. The current focus is reliability, local-first privacy, clean Windows packaging, and a polished bilingual user experience.
 
 ## License
 
